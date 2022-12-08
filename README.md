@@ -2,8 +2,7 @@
 
 # Description:
 This project receives a string as an argument and outputs the string in a graphic representation using ASCII. And prints the output via three banners: standard, shadow and thinkertoy.
-# Authors:
-@Myrzakhmet
+
 # Usage:
 1. To run program use  the following command
 
