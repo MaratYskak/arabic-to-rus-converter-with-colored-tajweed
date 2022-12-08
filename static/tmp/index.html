@@ -1,0 +1,40 @@
+{{ define "index" }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ascii-art</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/style/ikonca.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Cookie&family=Mali:ital,wght@1,200;1,300&family=Shadows+Into+Light&display=swap" rel="stylesheet">  
+  </head>
+  <body>
+    <a class="home" href="/"><h1>Ascii-art-web</h1></a> 
+    <div>
+      <form method="post" action="/ascii-art">
+        <div class="font">
+          <div class="font_button">
+            <input id="std-font" type="radio" name="font" value="standard" checked />
+            <label for="std-font">shadow</label> 
+          </div>
+          <div class="font_button">
+            <input id="sh-font" type="radio" name="font" value="shadow" />
+            <label for="sh-font">shadow</label> 
+          </div>
+          <div class="font_button">
+            <input id="thk-font" type="radio" name="font" value="thinkertoy" />
+            <label for="thk-font">thinkertoy</label> 
+          </div>
+        </div>
+        <br>
+        <p>Enter the text:</p>
+        <div><textarea class="input" name="input" required placeholder="Hello, Alem!"></textarea></div>
+        <div><br><button class="sendButton" type="submit">Submit</button></div>
+      
+        <div><br><pre class="message">{{ .Pic}}</pre></div>
+      </form>
+    </div>
+  </body>
+</html>
+
+{{ end }}
