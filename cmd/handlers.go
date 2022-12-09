@@ -50,6 +50,9 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 	// 	"clear":   "\033[0m",
 	// }
 	mapa := map[rune]string{
+		'ٌ': "ун",
+		'ٍ': "ин",
+		'ً': "ан",
 		' ': " ",
 		'َ': "а",
 		'ِ': "и",
@@ -84,6 +87,24 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		'ظ': "з!",
 	}
 
+	ihfa := map[rune]bool{
+		'ت': true,
+		'ث': true,
+		'ج': true,
+		'د': true,
+		'ذ': true,
+		'س': true,
+		'ش': true,
+		'ص': true,
+		'ض': true,
+		'ط': true,
+		'ظ': true,
+		'ف': true,
+		'ق': true,
+		'ك': true,
+		'ز': true,
+	}
+
 	// result := ""
 	skip := 0
 	for i, v := range ArabicText {
@@ -100,6 +121,43 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			skip = 1
 			DataSlice = append(DataSlice, &templateData{"я", "", false})
 			// result += "я"
+			continue
+		}
+		//ю
+		if v == 'ي' && ArabicText[i+1] == 'ُ' {
+			skip = 1
+			DataSlice = append(DataSlice, &templateData{"ю", "", false})
+			// result += "я"
+			continue
+		}
+		//ихфа. нун в конце слова и без огласовки
+		if v == 'ن' && ArabicText[i+1] == ' ' && ihfa[ArabicText[i+2]] {
+			skip = 2
+			DataSlice = append(DataSlice, &templateData{"н-", "ihfa", false})
+			continue
+		}
+		//ихфа. нун в конце слова с сукуном
+		if v == 'ن' && ArabicText[i+1] == 'ْ' && ArabicText[i+2] == ' ' && ihfa[ArabicText[i+3]] {
+			skip = 3
+			DataSlice = append(DataSlice, &templateData{"н-", "ihfa", false})
+			continue
+		}
+		//ихфа. фатха танвин
+		if v == 'ً' && ArabicText[i+1] == ' ' && ihfa[ArabicText[i+2]] {
+			skip = 2
+			DataSlice = append(DataSlice, &templateData{"ан-", "ihfa", false})
+			continue
+		}
+		//ихфа. кясра танвин
+		if v == 'ٍ' && ArabicText[i+1] == ' ' && ihfa[ArabicText[i+2]] {
+			skip = 2
+			DataSlice = append(DataSlice, &templateData{"ин-", "ihfa", false})
+			continue
+		}
+		//ихфа. дамма танвин
+		if v == 'ٌ' && ArabicText[i+1] == ' ' && ihfa[ArabicText[i+2]] {
+			skip = 2
+			DataSlice = append(DataSlice, &templateData{"ун-", "ihfa", false})
 			continue
 		}
 		//гунна мим мим
