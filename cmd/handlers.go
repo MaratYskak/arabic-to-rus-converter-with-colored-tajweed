@@ -50,6 +50,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 	// 	"clear":   "\033[0m",
 	// }
 	mapa := map[rune]string{
+		'ّ': "shadda",
 		'ٌ': "ун",
 		'ٍ': "ин",
 		'ً': "ан",
@@ -103,6 +104,25 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		'ق': true,
 		'ك': true,
 		'ز': true,
+	}
+
+	qamariya := map[rune]bool{
+		'أ': true,
+		'إ': true,
+		'آ': true,
+		'ق': true,
+		'ف': true,
+		'غ': true,
+		'ع': true,
+		'ه': true,
+		'خ': true,
+		'ح': true,
+		'ج': true,
+		'ي': true,
+		'ب': true,
+		'م': true,
+		'ك': true,
+		'و': true,
 	}
 
 	// result := ""
@@ -246,12 +266,15 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			}
 			if ArabicText[i+1] == ' ' && ArabicText[i+2] == 'ا' && ArabicText[i+3] == 'ل' {
 				//
-				//фиксим баг
-				//<<<<<
+				//
+				//<<<<< фиксим баг "мин-ариль"
 				DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
+				//
+				//
 				//>>>>>
 
-				if ArabicText[i+5] == 'آ' || ArabicText[i+5] == 'إ' || ArabicText[i+5] == 'أ' || ArabicText[i+5] == 'ا' || ArabicText[i+5] == 'ق' || ArabicText[i+5] == 'ف' || ArabicText[i+5] == 'غ' || ArabicText[i+5] == 'ع' || ArabicText[i+5] == 'ه' || ArabicText[i+5] == 'خ' || ArabicText[i+5] == 'ح' || ArabicText[i+5] == 'ج' || ArabicText[i+5] == 'ي' || ArabicText[i+5] == 'ب' || ArabicText[i+5] == 'ل' || ArabicText[i+5] == 'م' || ArabicText[i+5] == 'ك' || ArabicText[i+5] == 'و' {
+				//лунные буквы, когда у "аль" лям хоть с сукуном, хоть без
+				if qamariya[ArabicText[i+4]] || (ArabicText[i+4] == 'ْ' && qamariya[ArabicText[i+5]]) {
 					DataSlice = append(DataSlice, &templateData{"ль", "", false})
 					// result += "ль"
 				} else {
@@ -316,7 +339,8 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		}
 		if mapa[v] == " " {
 			DataSlice = append(DataSlice, &templateData{"", "", true})
-		} else {
+		}
+		if mapa[v] != " " && mapa[v] != "shadda" {
 			DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
 		}
 
