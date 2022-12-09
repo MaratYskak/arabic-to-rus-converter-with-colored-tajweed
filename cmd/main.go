@@ -15,7 +15,9 @@ type application struct {
 }
 
 func main() {
-	addr := flag.String("addr", ":4000", "Сетевой адрес веб-сервера")
+	port := os.Getenv("PORT")
+	port = ":" + port
+	addr := flag.String("addr", port, "Сетевой адрес веб-сервера")
 	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
