@@ -8,6 +8,9 @@
           {{ if eq .Tajweed "gunna" }}
             <div class="green" style="color: green;"> {{ .Letter }} </div>
           {{ end }}
+          {{ if eq .Tajweed "ihfa" }}
+            <div  style="color: purple;"> {{ .Letter }} </div>
+          {{ end }}
           {{ if eq .Tajweed "" }}
             <div class="common"> {{ .Letter }} </div>
           {{ end }}
