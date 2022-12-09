@@ -1,0 +1,25 @@
+
+{{template "base" .}}
+{{ define "main" }}
+  <main>
+    <section>
+      <div class="strok">
+        {{ range . }}
+          {{ if eq .Tajweed "gunna" }}
+            <div class="green" style="color: green;"> {{ .Letter }} </div>
+          {{ end }}
+          {{ if eq .Tajweed "" }}
+            <div class="common"> {{ .Letter }} </div>
+          {{ end }}
+          {{ if .Space }}
+            <div class="common"> &nbsp </div>
+          {{ end }}
+        {{ end }}
+
+      </div>
+
+    </section>
+  </main>
+{{ end }}
+
+

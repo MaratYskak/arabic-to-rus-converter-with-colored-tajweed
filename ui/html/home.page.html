@@ -1,0 +1,13 @@
+{{template "base" .}}
+
+{{define "main"}}
+<form class="result" action="/result" method="POST">
+      <textarea name="input" required placeholder="вставьте сюда аят" rows="4" cols="40"></textarea>
+      <div>
+        <input type='submit' style="margin-left: 20px;" value='Конвертировать'> 
+    </div>
+      
+    </form>
+
+   
+{{end}}

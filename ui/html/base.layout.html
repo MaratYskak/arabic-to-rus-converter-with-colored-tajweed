@@ -1,0 +1,24 @@
+{{define "base"}}
+<!doctype html>
+<html lang='en'> 
+
+        <head>
+            <meta charset='utf-8'>
+            <title>ar to rus converter</title>
+            <!-- Ссылка на CSS стили и иконку сайта -->
+            <link rel='stylesheet' href='/static/css/main.css'>
+            <link rel='shortcut icon' href='/static/img/favicon.ico' type='image/x-icon'>
+            <!-- Подключаем новый шрифт для сайта от Google Fonts -->
+            <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700'>
+        </head>
+
+<body> <header>
+<h1><a href='/'>транскрипция аятов с таджвидом</a></h1> </header>
+<nav>
+<a href='/'>Конвертировать</a>
+<a href='/howto'>Пояснения</a>
+<a target='_blank' href='#'>Готовые транскрипции</a>
+</nav> 
+{{template "main" .}}
+</body> </html>
+{{end}}
