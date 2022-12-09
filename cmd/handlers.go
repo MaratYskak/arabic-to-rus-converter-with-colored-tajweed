@@ -182,7 +182,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		}
 		//шадда
 		if v == 'ّ' {
-			DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i-1]], "", false})
+			DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i-2]], "", false})
 			continue
 		}
 		//гунна нун с шаддой
