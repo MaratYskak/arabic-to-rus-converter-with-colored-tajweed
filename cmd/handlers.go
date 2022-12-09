@@ -76,7 +76,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		'ز': "з",
 		'ض': "д!",
 		'ص': "с!",
-		'و': "у",
+		'و': "w",
 		'ه': "h",
 		'م': "м",
 		'ن': "н",
@@ -185,13 +185,28 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i-1]], "", false})
 			DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
 			skip = 1
+			if ArabicText[i+2] == ' ' && ArabicText[i+3] == 'ا' && ArabicText[i+4] == 'ل' {
+				if qamariya[ArabicText[i+5]] {
+					DataSlice = append(DataSlice, &templateData{"ль", "", false})
+					DataSlice = append(DataSlice, &templateData{"", "", true})
+					skip = 3
+				}
+				if ArabicText[i+5] == 'ْ' && qamariya[ArabicText[i+6]] {
+					DataSlice = append(DataSlice, &templateData{"ль", "", false})
+					DataSlice = append(DataSlice, &templateData{"", "", true})
+					skip = 4
+				}
+			}
 			continue
 		}
 		//гунна нун с шаддой
-		if ArabicText[i+1] == 'ّ' && v == 'ن' {
-			DataSlice = append(DataSlice, &templateData{"н", "gunna", false})
-			skip = 1
-			continue
+		if v == 'ن' && i < len(ArabicText)-3 {
+			if ArabicText[i+2] == 'ّ' && (ArabicText[i+1] == 'َ' || ArabicText[i+1] == 'ِ' || ArabicText[i+1] == 'ُ') && v == 'ن' {
+				DataSlice = append(DataSlice, &templateData{"н", "gunna", false})
+				DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i+1]], "", false})
+				skip = 2
+				continue
+			}
 		}
 		//гунна мим мим
 		if v == 'م' && ArabicText[i+1] == ' ' && ArabicText[i+2] == 'م' {
