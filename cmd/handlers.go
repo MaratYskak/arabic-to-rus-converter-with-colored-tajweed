@@ -62,6 +62,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		'ب': "б",
 		'ت': "т",
 		'ث': "с?",
+		'ق': "қ",
 		'ج': "j",
 		'ح': "х",
 		'خ': "х!",
@@ -135,6 +136,13 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		//конец слова
 		if i == len(ArabicText)-1 {
 			break
+		}
+		//мадд
+		if (v == 'َ' && ArabicText[i+1] == 'ا') || (v == 'ِ' && ArabicText[i+1] == 'ي') || (v == 'ُ' && ArabicText[i+1] == 'و') {
+			DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
+			DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
+			skip = 1
+			continue
 		}
 		//я
 		if v == 'ي' && ArabicText[i+1] == 'َ' {
@@ -292,79 +300,49 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 				// result += "и"
 				continue
 			}
+			//солнечные и лунные буквы
 			if ArabicText[i+1] == ' ' && ArabicText[i+2] == 'ا' && ArabicText[i+3] == 'ل' {
-				//
-				//
-				//<<<<< фиксим баг "мин-ариль"
+				//аппендим текущую перед пробелом
 				if mapa[v] != " " && mapa[v] != "shadda" {
 					DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
 				}
-				//
-				//
-				//>>>>>
 
-				//лунные буквы, когда у "аль" лям хоть с сукуном, хоть без
-				if qamariya[ArabicText[i+4]] || (ArabicText[i+4] == 'ْ' && qamariya[ArabicText[i+5]]) {
+				//лунные буквы, когда у "аль" лям без сукуна
+				if ArabicText[i+4] != 'ْ' && qamariya[ArabicText[i+4]] {
 					DataSlice = append(DataSlice, &templateData{"ль", "", false})
-					// result += "ль"
-				} else {
-					if ArabicText[i+5] == 'ض' {
-						DataSlice = append(DataSlice, &templateData{"д", "", false})
-						// result += "д"
-					}
-					if ArabicText[i+5] == 'ص' {
-						DataSlice = append(DataSlice, &templateData{"с!", "", false})
-						// result += "с!"
-					}
-					if ArabicText[i+5] == 'ث' {
-						DataSlice = append(DataSlice, &templateData{"с?", "", false})
-						// result += "с"
-					}
-					if ArabicText[i+5] == 'ش' {
-						DataSlice = append(DataSlice, &templateData{"ш", "", false})
-						// result += "ш"
-					}
-					if ArabicText[i+5] == 'س' {
-						DataSlice = append(DataSlice, &templateData{"с", "", false})
-						// result += "с"
-					}
-					if ArabicText[i+5] == 'ت' {
-						DataSlice = append(DataSlice, &templateData{"т", "", false})
-						// result += "т"
-					}
-					if ArabicText[i+5] == 'ن' {
-						DataSlice = append(DataSlice, &templateData{"н", "", false})
-						// result += "н"
-					}
-					if ArabicText[i+5] == 'ظ' {
-						DataSlice = append(DataSlice, &templateData{"з!", "", false})
-						// result += "з"
-					}
-					if ArabicText[i+5] == 'ط' {
-						DataSlice = append(DataSlice, &templateData{"т!", "", false})
-						// result += "т"
-					}
-					if ArabicText[i+5] == 'ذ' {
-						DataSlice = append(DataSlice, &templateData{"з?", "", false})
-						// result += "з"
-					}
-					if ArabicText[i+5] == 'د' {
-						DataSlice = append(DataSlice, &templateData{"д", "", false})
-						// result += "д"
-					}
-					if ArabicText[i+5] == 'ز' {
-						DataSlice = append(DataSlice, &templateData{"з", "", false})
-						// result += "з"
-					}
-					if ArabicText[i+5] == 'ر' {
-						DataSlice = append(DataSlice, &templateData{"р", "", false})
-						// result += "р"
-					}
+					DataSlice = append(DataSlice, &templateData{"", "", true})
+					skip = 3
+					continue
 				}
-				skip = 3
-				DataSlice = append(DataSlice, &templateData{"", "", true})
-				// result += " "
-				continue
+				//лунные буквы, когда у "аль" лям с сукуном
+				if ArabicText[i+4] == 'ْ' && qamariya[ArabicText[i+5]] {
+					DataSlice = append(DataSlice, &templateData{"ль", "", false})
+					DataSlice = append(DataSlice, &templateData{"", "", true})
+					skip = 4
+					continue
+				}
+				//солнечные буквы, когда у "аль" лям без сукуна
+				if ArabicText[i+4] != 'ْ' && !qamariya[ArabicText[i+4]] {
+					if ArabicText[i+4] == 'ن' {
+						DataSlice = append(DataSlice, &templateData{"н-", "gunna", false})
+						skip = 3
+						continue
+					}
+					DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i+4]], "", false})
+					skip = 3
+					continue
+				}
+				//солнечные буквы, когда у "аль" лям с сукуном
+				if ArabicText[i+4] == 'ْ' && !qamariya[ArabicText[i+5]] {
+					if ArabicText[i+5] != 'ن' {
+						DataSlice = append(DataSlice, &templateData{"н", "gunna", false})
+						skip = 4
+						continue
+					}
+					DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i+4]], "", false})
+					skip = 4
+					continue
+				}
 			}
 		}
 		if mapa[v] == " " {
