@@ -60,16 +60,16 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		'ا': "а",
 		'ب': "б",
 		'ت': "т",
-		'ث': "th",
-		'ج': "дж",
+		'ث': "с?",
+		'ج': "j",
 		'ح': "х",
-		'خ': "ҳ",
+		'خ': "х!",
 		'ف': "ф",
 		'ي': "й",
 		'أ': "а",
 		'إ': "и",
 		'د': "д",
-		'ذ': "з",
+		'ذ': "з?",
 		'ل': "л",
 		'ر': "р",
 		'ز': "з",
@@ -138,7 +138,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		}
 		//ихфа. нун в конце слова с сукуном
 		if v == 'ن' && ArabicText[i+1] == 'ْ' && ArabicText[i+2] == ' ' && ihfa[ArabicText[i+3]] {
-			skip = 3
+			skip = 2
 			DataSlice = append(DataSlice, &templateData{"н-", "ihfa", false})
 			continue
 		}
@@ -245,6 +245,11 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			if ArabicText[i+1] == ' ' && ArabicText[i+2] == 'ا' && ArabicText[i+3] == 'ل' {
+				//
+				//фиксим баг
+				//<<<<<
+				DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
+				//>>>>>
 
 				if ArabicText[i+5] == 'آ' || ArabicText[i+5] == 'إ' || ArabicText[i+5] == 'أ' || ArabicText[i+5] == 'ا' || ArabicText[i+5] == 'ق' || ArabicText[i+5] == 'ف' || ArabicText[i+5] == 'غ' || ArabicText[i+5] == 'ع' || ArabicText[i+5] == 'ه' || ArabicText[i+5] == 'خ' || ArabicText[i+5] == 'ح' || ArabicText[i+5] == 'ج' || ArabicText[i+5] == 'ي' || ArabicText[i+5] == 'ب' || ArabicText[i+5] == 'ل' || ArabicText[i+5] == 'م' || ArabicText[i+5] == 'ك' || ArabicText[i+5] == 'و' {
 					DataSlice = append(DataSlice, &templateData{"ль", "", false})
