@@ -268,7 +268,9 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 				//
 				//
 				//<<<<< фиксим баг "мин-ариль"
-				DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
+				if mapa[v] != " " && mapa[v] != "shadda" {
+					DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
+				}
 				//
 				//
 				//>>>>>
