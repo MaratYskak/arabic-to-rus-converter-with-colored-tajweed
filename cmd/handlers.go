@@ -180,6 +180,17 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			DataSlice = append(DataSlice, &templateData{"ун-", "ihfa", false})
 			continue
 		}
+		//шадда
+		if v == 'ّ' {
+			DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i-1]], "", false})
+			continue
+		}
+		//гунна нун с шаддой
+		if ArabicText[i+1] == 'ّ' && v == 'ن' {
+			DataSlice = append(DataSlice, &templateData{"н", "gunna", false})
+			skip = 1
+			continue
+		}
 		//гунна мим мим
 		if v == 'م' && ArabicText[i+1] == ' ' && ArabicText[i+2] == 'م' {
 			skip = 2
