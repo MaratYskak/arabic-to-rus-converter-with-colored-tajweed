@@ -80,6 +80,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 		'و': "w",
 		'ه': "h",
 		'م': "м",
+		'ك': "к",
 		'ن': "н",
 		'ع': "'",
 		'غ': "ғ",
@@ -128,7 +129,9 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 
 	// result := ""
 	skip := 0
-	for i, v := range ArabicText {
+	for i := 0; i < len(ArabicText)-1; i++ {
+		v := ArabicText[i]
+		// fmt.Println("index: ", i, "; value: ", string(v))
 		if skip > 0 {
 			skip--
 			continue
@@ -189,6 +192,7 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		//шадда
+		//TODO: обработать out of range, т.к. тут мы обращаемся ArabicText[i+5]
 		if (v == 'َ' || v == 'ِ' || v == 'ُ') && ArabicText[i+1] == 'ّ' {
 			DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i-1]], "", false})
 			DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
@@ -203,6 +207,17 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 					DataSlice = append(DataSlice, &templateData{"ль", "", false})
 					DataSlice = append(DataSlice, &templateData{"", "", true})
 					skip = 4
+				}
+				if !qamariya[ArabicText[i+5]] && ArabicText[i+5] != 'ْ' {
+					if ArabicText[i+5] == 'ن' {
+						DataSlice = append(DataSlice, &templateData{"н-", "gunna", false})
+						skip = 4
+						continue
+					}
+					DataSlice = append(DataSlice, &templateData{mapa[ArabicText[i+5]], "", false})
+					DataSlice = append(DataSlice, &templateData{"", "", true})
+					skip = 4
+					continue
 				}
 			}
 			continue
@@ -233,6 +248,10 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			// fmt.Print("\033[0m")
 			continue
 		}
+		//тут будут проверки "аль".
+		//будут проверки ArabicText[i+5],
+		//поэтому заходим сюда только если i < len(ArabicText)-5
+		//TODO: нужно обработать случаи, когда "аль" в конце
 		if i < len(ArabicText)-5 {
 			if v == 'إ' {
 				skip = 1
@@ -290,7 +309,8 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			//филь
 			if ArabicText[i+1] == ' ' && v == 'ي' && (ArabicText[i+2] == 'ا' && ArabicText[i+3] == 'ل') {
 				skip = 3
-				DataSlice = append(DataSlice, &templateData{" ", "", false})
+				DataSlice = append(DataSlice, &templateData{"", "", false})
+				DataSlice = append(DataSlice, &templateData{"", "", true})
 				// result += " "
 				continue
 			}
@@ -352,7 +372,6 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 			DataSlice = append(DataSlice, &templateData{mapa[v], "", false})
 		}
 
-		// fmt.Print(mapa[v])
 	}
 
 	// Используем помощника render() для отображения шаблона.
