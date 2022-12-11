@@ -33,20 +33,20 @@ func (app *application) notFound(w http.ResponseWriter) {
 // struct, adds the current year to the CurrentYear field, and then returns
 // the pointer. Again, we're not using the *http.Request parameter at the
 // moment, but we will do later in the book.
-func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
-	if td == nil {
-		td = &templateData{}
-	}
-	return td
-}
+// func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
+// 	if td == nil {
+// 		td = &templateData{}
+// 	}
+// 	return td
+// }
 
-func (app *application) render(w http.ResponseWriter, r *http.Request, name string, td tdSlice) {
+func (app *application) render(w http.ResponseWriter, r *http.Request, name string, td []*templateData) {
 	// Извлекаем соответствующий набор шаблонов из кэша в зависимости от названия страницы
 	// (например, 'home.page.tmpl'). Если в кэше нет записи запрашиваемого шаблона, то
 	// вызывается вспомогательный метод serverError(), который мы создали ранее.
 	ts, ok := app.templateCache[name]
 	if !ok {
-		app.serverError(w, fmt.Errorf("Шаблон %s не существует!", name))
+		app.serverError(w, fmt.Errorf("шаблон %s не существует", name))
 		return
 	}
 

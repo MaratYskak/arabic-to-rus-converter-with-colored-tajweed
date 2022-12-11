@@ -12,6 +12,11 @@ type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	templateCache map[string]*template.Template
+	alphabet      map[rune]string
+	ihfa          map[rune]bool
+	qamariya      map[rune]bool
+	hards         map[rune]bool
+	dataSlice     []*templateData
 }
 
 func main() {
@@ -34,6 +39,11 @@ func main() {
 		infoLog:       infoLog,
 		templateCache: templateCache,
 	}
+	app.alphabet = app.initAlphabet()
+	app.ihfa = app.initIhfa()
+	app.qamariya = app.initQamariya()
+	app.hards = app.initHards()
+	app.dataSlice = app.initDataSlice()
 
 	srv := &http.Server{
 		Addr:     *addr,

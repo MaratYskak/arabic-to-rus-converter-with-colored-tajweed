@@ -11,8 +11,6 @@ type templateData struct {
 	Space   bool
 }
 
-type tdSlice []*templateData
-
 func newTemplateCache(dir string) (map[string]*template.Template, error) {
 	// Initialize a new map to act as the cache.
 	cache := map[string]*template.Template{}
@@ -53,4 +51,105 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 	}
 	// Return the map.
 	return cache, nil
+}
+
+func (app *application) initAlphabet() map[rune]string {
+	return map[rune]string{
+		'ّ': "shadda",
+		'ٌ': "ун",
+		'ٍ': "ин",
+		'ً': "ан",
+		'ة': "т",
+		' ': " ",
+		'َ': "а",
+		'ِ': "и",
+		'ُ': "у",
+		'ا': "а",
+		'ب': "б",
+		'ت': "т",
+		'ث': "с?",
+		'ق': "қ",
+		'ج': "j",
+		'ح': "х",
+		'خ': "х!",
+		'ف': "ф",
+		'ي': "й",
+		'أ': "а",
+		'إ': "и",
+		'د': "д",
+		'ذ': "з?",
+		'ل': "л",
+		'ر': "р",
+		'ز': "з",
+		'ض': "д!",
+		'ص': "с!",
+		'و': "w",
+		'ه': "h",
+		'م': "м",
+		'ك': "к",
+		'ن': "н",
+		'ع': "'",
+		'غ': "ғ",
+		'س': "с",
+		'ش': "ш",
+		'ط': "т!",
+		'ظ': "з!",
+	}
+}
+
+func (app *application) initIhfa() map[rune]bool {
+	return map[rune]bool{
+		'ت': true,
+		'ث': true,
+		'ج': true,
+		'د': true,
+		'ذ': true,
+		'س': true,
+		'ش': true,
+		'ص': true,
+		'ض': true,
+		'ط': true,
+		'ظ': true,
+		'ف': true,
+		'ق': true,
+		'ك': true,
+		'ز': true,
+	}
+}
+
+func (app *application) initHards() map[rune]bool {
+	return map[rune]bool{
+		'ض': true,
+		'ص': true,
+		'ق': true,
+		'غ': true,
+		'خ': true,
+		'ظ': true,
+		'ط': true,
+	}
+}
+
+func (app *application) initQamariya() map[rune]bool {
+	return map[rune]bool{
+		'أ': true,
+		'إ': true,
+		'آ': true,
+		'ق': true,
+		'ف': true,
+		'غ': true,
+		'ع': true,
+		'ه': true,
+		'خ': true,
+		'ح': true,
+		'ج': true,
+		'ي': true,
+		'ب': true,
+		'م': true,
+		'ك': true,
+		'و': true,
+	}
+}
+
+func (app *application) initDataSlice() []*templateData {
+	return []*templateData{}
 }
