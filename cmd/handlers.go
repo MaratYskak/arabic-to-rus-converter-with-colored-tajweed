@@ -31,11 +31,11 @@ func (app *application) result(w http.ResponseWriter, r *http.Request) {
 	}
 
 	text := r.FormValue("input")
-
 	ArabicText := []rune(text)
 
 	app.convert(ArabicText)
 
 	// Используем помощника render() для отображения шаблона.
 	app.render(w, r, "convert.page.html", app.dataSlice)
+	app.dataSlice = nil
 }

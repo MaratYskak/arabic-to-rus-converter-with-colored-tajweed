@@ -21,7 +21,14 @@ func (app *application) convert(ArabicText []rune) {
 				continue
 			}
 		}
-		//TODO: ә в середине аята нужно обработать после проверки на "аль"
+		//ә в середине аята
+		if i > 1 {
+			if (v == 'ا' || v == 'أ') && ArabicText[i+1] == 'َ' && ArabicText[i-1] == ' ' {
+				app.dataSlice = append(app.dataSlice, &templateData{"ә", "", false})
+				skip = 1
+				continue
+			}
+		}
 
 		// "ль" куль альхамд и тд
 		if v == 'ل' && ArabicText[i+1] == 'ْ' {
